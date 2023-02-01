@@ -5,3 +5,6 @@
 
 __pycache__/
 *.pyc
+
+examples/webcam_demo.mp4
+examples/webcam_output.mp4
