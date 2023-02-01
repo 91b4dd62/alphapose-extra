@@ -1,3 +1,8 @@
+from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
+                         vis_pose_result, process_mmdet_results)
+from mmdet.apis import inference_detector, init_detector
+import tempfile
+import os.path as osp
 from lib import MMPose
 from tqdm import tqdm
 import cv2
@@ -6,13 +11,29 @@ import sys
 input_file = sys.argv[1]
 output_file = sys.argv[2]
 
+device = 'cpu'
 model = MMPose(backbone='SCNet')
+pose_model = init_pose_model(
+    model.pose_config, model.pose_checkpoint, device='cpu')
+det_model = init_detector(
+    model.det_config, model.det_checkpoint, device='cpu')
 
 
 def process_frame(frame):
-    result = model.inference(img=frame, device='cpu',
-                             save=False, show=False, return_vis_result=True)
-    return result
+    mmdet_results = inference_detector(det_model, frame)
+    person_results = process_mmdet_results(mmdet_results, cat_id=1)
+    pose_results, returned_outputs = inference_top_down_pose_model(pose_model,
+                                                                   frame,
+                                                                   person_results,
+                                                                   bbox_thr=0.3,
+                                                                   format='xyxy',
+                                                                   dataset=pose_model.cfg.data.test.type)
+    vis_result = vis_pose_result(pose_model,
+                                 frame,
+                                 pose_results,
+                                 dataset=pose_model.cfg.data.test.type,
+                                 show=False)
+    return vis_result
 
 
 def main():
