@@ -1,8 +1,6 @@
-from MMEdu import MMPose
-import shutil
-import cv2
+from lib import MMPose
 
-img = '1.jpg'
+img = 'example/1.jpg'
 
 
 def main():
