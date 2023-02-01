@@ -21,3 +21,13 @@ Video
 ```sh
 python video [input-video] [output-video]
 ```
+
+Webcam test
+```sh
+python webcam.py --config webcam_cfg/test_camera.py
+```
+
+Webcam pose tracking
+```sh
+python webcam.py --config webcam_cfg/pose_tracking.py
+```
