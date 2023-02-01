@@ -1,11 +1,12 @@
 from lib import MMPose
+import sys
 
-img = 'example/1.jpg'
+img = sys.argv[1]
 
 
 def main():
     model = MMPose(backbone='SCNet')
-    result = model.inference(img=img, device='cpu', show=True)  # 在CPU上进行推理
+    result = model.inference(img=img, device='cpu', show=True)
     print(result)
 
 
