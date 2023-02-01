@@ -1,5 +1,14 @@
+from MMEdu import MMPose
+import shutil
+
+img = '1.jpg'
+
+
 def main():
-    print("MAIN FUNCTION")
+    model = MMPose(backbone='SCNet')
+    result = model.inference(img=img, device='cpu', show=False)  # 在CPU上进行推理
+    print(result)
+
 
 if __name__ == "__main__":
     main()
