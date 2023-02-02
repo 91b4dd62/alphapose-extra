@@ -28,7 +28,7 @@ def main():
     model = MMPose(backbone='SCNet')
     if mode == 'img':
         result = model.inference(img=path, device=device,
-                                 show=True, name=os.path.splitext(img)[0]+"_output")
+                                 show=True, name=os.path.splitext(path)[0]+"_output")
         print(result)
     else:
         counter = 0
