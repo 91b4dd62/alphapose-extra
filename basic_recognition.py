@@ -13,13 +13,26 @@ def angle(v1, v2):
 def angleBetweenLines(line1, line2):
     # line1 = [[x1, y1], [x2, y2]]
     # line2 = [[x3, y3], [x4, y4]]
+    # By projecting one end of the line to the other line, determine which is the longer side
+    # and then decide whether the angle is larger than 90 degrees
     x1, y1 = line1[0]
     x2, y2 = line1[1]
     x3, y3 = line2[0]
     x4, y4 = line2[1]
-    v1 = [x2 - x1, y2 - y1]
-    v2 = [x4 - x3, y4 - y3]
-    return angle(v1, v2)
+    v1 = np.array([x2-x1, y2-y1])
+    v2 = np.array([x4-x3, y4-y3])
+    v3 = np.array([x4-x1, y4-y1])
+    v4 = np.array([x2-x3, y2-y3])
+    if np.linalg.norm(v1) > np.linalg.norm(v2):
+        if np.linalg.norm(v3) < np.linalg.norm(v1):
+            return angle(v1, v3)
+        else:
+            return angle(v1, v4)
+    else:
+        if np.linalg.norm(v3) < np.linalg.norm(v2):
+            return angle(v2, v3)
+        else:
+            return angle(v2, v4)
 
 # visualization (from poseflow)
 
