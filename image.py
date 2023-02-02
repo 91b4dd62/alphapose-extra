@@ -1,38 +1,16 @@
 from lib import MMPose
 from tqdm import tqdm
-import getopt
 import cv2
-import sys
 import os
 
-device = 'cpu'
 
-
-def process_args():
-    global mode, path
-    opts, args = getopt.getopt(sys.argv[1:], "i:d:", ["img=", "dir="])
-    for op, value in opts:
-        if op in ("-i", "--img"):
-            mode = 'img'
-            path = value
-        elif op in ("-d", "--dir"):
-            mode = 'dir'
-            path = value
-        else:
-            print(
-                "Usage: python image.py -i <image>\n       python image.py -d <image_dir>")
-            sys.exit(1)
-
-
-def main():
-    global mode, path, device
+def run_image(path: str, batch: bool, device: str):
     model = MMPose(backbone='SCNet')
-    if mode == 'img':
+    if not batch:
         result = model.inference(img=path, device=device,
                                  show=True, name=os.path.splitext(img)[0]+"_output")
         print(result)
     else:
-        counter = 0
         total = len([name for name in os.listdir(path)
                      if (name.endswith(".jpg") or name.endswith(".png"))])
 
@@ -76,8 +54,3 @@ def main():
                     cv2.imwrite(file_name1, vis_result)
 
                 bar.update()
-
-
-if __name__ == "__main__":
-    process_args()
-    main()

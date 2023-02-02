@@ -6,7 +6,7 @@ from mmcv import Config
 from mmcls.apis import inference_model, init_model, show_result_pyplot, train_model, set_random_seed
 from mmcls.models import build_classifier
 from mmcls.datasets import build_dataset
-from mmcv.runner import load_checkpoint
+from mmcv import load_checkpoint
 from tqdm import tqdm
 
 
