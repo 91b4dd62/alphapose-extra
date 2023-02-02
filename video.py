@@ -54,7 +54,7 @@ def process_frame(frame):
     return (pose_results, vis_result)
 
 
-def run_video(input_file, output_file, device, output):
+def run_video(input_file, output_file, device, output, poseflow):
     if not os.path.isfile(input_file):
         raise Exception("File not found")
     if not (input_file.endswith(".mp4")):
@@ -69,9 +69,11 @@ def run_video(input_file, output_file, device, output):
     result = {}
 
     bar = tqdm(total=total_frames)
+    count = 0
 
     while video_capture.isOpened():
         frame_is_read, frame = video_capture.read()
+        count += 1
 
         if video_writer is None:
             video_writer = cv2.VideoWriter(
@@ -82,10 +84,15 @@ def run_video(input_file, output_file, device, output):
                 True,
             )
 
+        if poseflow:
+            cv2.imwrite(os.path.splitext(input_file)[
+                        0] + '_frames/' + os.path.splitext(input_file)[0] + '_' + str(count) + '.png', frame)
+
         if frame_is_read and frame is not None:
             proc = process_frame(frame)
             video_writer.write(proc[1])
-            result[input_file] = processResult(proc[0])
+            result[os.path.splitext(input_file)[0] + '_frames/' + os.path.splitext(
+                input_file)[0] + '_' + str(count) + '.png'] = processResult(proc[0])
             bar.update()
         else:
             print("Could not read the frame.")

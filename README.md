@@ -23,9 +23,18 @@ python cli.py image [image | directory] [--batch] [--output]
 ### Video
 
 ```sh
-python cli.py video [input-video] [output-video]
+python cli.py video [input-video] [output-video] [--output] [--poseflow]
 ```
 `--output` for writing the json output to a file. (very big)
+`--poseflow` for generating each frame as well for [Poseflow](https://github.com/YuliangXiu/PoseFlow) support. **Poseflow isn't included in this repo.**  
+Use the following command with Poseflow under the same directory to generate Poseflow trackers.
+```sh
+python tracker-general.py --imgdir [video_name]_frames 
+                          --in_json [video_name]_output.json 
+                          --out_json [video_name]_output_forvis_tracked.json 
+                          --visdir [video_name]_tracked_frames
+```
+
 
 ### Webcam test
 
