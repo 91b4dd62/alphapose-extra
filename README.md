@@ -31,6 +31,7 @@ python cli.py video [input-video] [output-video]
 ```sh
 python cli.py webcam --config webcam_cfg/test_camera.py
 ```
+Press Q to quit.
 
 ### Webcam pose tracking
 
