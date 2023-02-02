@@ -25,6 +25,7 @@ python cli.py image [image | directory] [--batch] [--output]
 ```sh
 python cli.py video [input-video] [output-video]
 ```
+`--output` for write the json output to a file. (very big)
 
 ### Webcam test
 
