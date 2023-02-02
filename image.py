@@ -12,7 +12,7 @@ def run_image(path: str, batch: bool, device: str):
         print(result)
     else:
         total = len([name for name in os.listdir(path)
-                     if (name.endswith(".jpg") or name.endswith(".png"))])
+                     if (name.endswith(".jpg") or name.endswith(".png")) and name.find("_output") < 0])
 
         from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
                                  vis_pose_result, process_mmdet_results)
