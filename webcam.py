@@ -50,23 +50,9 @@ def set_device(cfg: Config, device: str):
     return cfg
 
 
-def run():
-    args = parse_args()
-    cfg = Config.fromfile(args.config)
-    cfg.merge_from_dict(args.cfg_options)
-
-    if args.debug:
-        logging.basicConfig(level=logging.DEBUG)
-
-    if args.cpu:
-        cfg = set_device(cfg, 'cpu')
-
-    if args.cuda:
-        cfg = set_device(cfg, 'cuda:0')
+def run_webcam(config, device):
+    cfg = Config.fromfile(config)
+    cfg = set_device(cfg, device)
 
     webcam_exe = WebcamExecutor(**cfg.executor_cfg)
     webcam_exe.run()
-
-
-if __name__ == '__main__':
-    run()
