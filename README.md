@@ -15,19 +15,23 @@ $ pip install -r requirements.txt
 ### Image
 
 ```sh
-python cli.py image [image | directory] [--batch] [--output]
+python cli.py image <file or directory> [--batch] [--output]
 ```
-`--batch` for multiple pictures (all the pictures in the directory)  
-`--output` for writing the json output to a file instead of printing to console.
+
+- `--batch` for multiple pictures (all the pictures in the directory)  
+- `--output` for writing the json output to a file instead of printing to console.
 
 ### Video
 
 ```sh
-python cli.py video [input-video] [output-video] [--output] [--poseflow]
+python cli.py video <input> <output> [--output] [--poseflow]
 ```
-`--output` for writing the json output to a file. (very big)
-`--poseflow` for generating each frame as well for [Poseflow](https://github.com/YuliangXiu/PoseFlow) support. **Poseflow isn't included in this repo.**  
+
+- `--output` for writing the json output to a file. (very big)
+- `--poseflow` for generating each frame as well for [Poseflow](https://github.com/YuliangXiu/PoseFlow) support. **Poseflow isn't included in this repo.**  
+
 Use the following command with Poseflow under the same directory to generate Poseflow trackers.
+
 ```sh
 python tracker-general.py --imgdir [video_name]_frames 
                           --in_json [video_name]_output.json 
@@ -35,13 +39,13 @@ python tracker-general.py --imgdir [video_name]_frames
                           --visdir [video_name]_tracked_frames
 ```
 
-
 ### Webcam test
 
 ```sh
 python cli.py webcam --config webcam_cfg/test_camera.py
 ```
-Press Q to quit.
+
+Press <kbd>Q</kbd> to quit.
 
 ### Webcam pose tracking
 
