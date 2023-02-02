@@ -7,3 +7,4 @@ mmdet==2.23.0
 mmcv-full==1.4.5
 IPython==8.9.0
 opencv-python==4.7.0.68
+typer==0.7.0
