@@ -1,33 +1,43 @@
 # alphapose-extra
 
+![Based on `mmcv`](https://img.shields.io/badge/based%20on-mmcv-blueviolet?style=flat-square) ![Supported Python Versions](https://img.shields.io/pypi/pyversions/mmcv?style=flat-square) ![License](https://img.shields.io/github/license/91b4dd62/alphapose-extra?style=flat-square)
+
 ## Installation
 
-```sh
-pip install -r requirements.txt
-```
-## Run
-
-Single picture
-```sh
-python image.py -i [image]
+```bash
+$ conda create --name openmmlab python=3.8 -y
+$ conda activate openmmlab
+$ pip install -r requirements.txt
 ```
 
-Multiple pictures
+## Run locally
+
+### Single picture
+
 ```sh
-python image.py -d [directory]
+python cli.py image [image]
 ```
 
-Video
+### Multiple pictures
+
 ```sh
-python video [input-video] [output-video]
+python cli.py image [directory] --batch
 ```
 
-Webcam test
+### Video
+
+```sh
+python cli.py video [input-video] [output-video]
+```
+
+### Webcam test
+
 ```sh
 python webcam.py --config webcam_cfg/test_camera.py
 ```
 
-Webcam pose tracking
+### Webcam pose tracking
+
 ```sh
 python webcam.py --config webcam_cfg/pose_tracking.py
 ```
