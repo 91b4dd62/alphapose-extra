@@ -7,19 +7,21 @@ from webcam import run_webcam
 
 app = typer.Typer()
 
+
 def auto_device():
     if torch.cuda.is_available():
         return "cuda:0"
     return "cpu"
 
+
 @app.command()
-def image(path: str, batch: bool = False, device: str = auto_device()):
-    run_image(path, batch, device)
+def image(path: str, batch: bool = False, device: str = auto_device(), output: bool = False):
+    run_image(path, batch, device, output)
 
 
 @app.command()
-def video(input_path: str, output_path: str, device: str = auto_device()):
-    run_video(input_path, output_path, device)
+def video(input_path: str, output_path: str, device: str = auto_device(), output: bool = False):
+    run_video(input_path, output_path, device, output)
 
 
 @app.command()

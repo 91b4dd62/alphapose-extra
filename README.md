@@ -12,17 +12,13 @@ $ pip install -r requirements.txt
 
 ## Run locally
 
-### Single picture
+### Image
 
 ```sh
-python cli.py image [image]
+python cli.py image [image | directory] [--batch] [--output]
 ```
-
-### Multiple pictures
-
-```sh
-python cli.py image [directory] --batch
-```
+`--batch` for multiple pictures (all the pictures in the directory)  
+`--output` for write the json output to a file instead of printing to console.
 
 ### Video
 
