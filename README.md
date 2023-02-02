@@ -18,13 +18,14 @@ $ pip install -r requirements.txt
 python cli.py image [image | directory] [--batch] [--output]
 ```
 `--batch` for multiple pictures (all the pictures in the directory)  
-`--output` for write the json output to a file instead of printing to console.
+`--output` for writing the json output to a file instead of printing to console.
 
 ### Video
 
 ```sh
 python cli.py video [input-video] [output-video]
 ```
+`--output` for writing the json output to a file. (very big)
 
 ### Webcam test
 
