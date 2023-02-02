@@ -1,4 +1,5 @@
 from lib import MMPose
+from tqdm import tqdm
 import getopt
 import cv2
 import sys
@@ -46,6 +47,8 @@ def main():
         det_model = init_detector(
             model.det_config, model.det_checkpoint, device=device)
 
+        bar = tqdm(total=total)
+
         for file in os.listdir(path):
             if file.endswith(".jpg") or file.endswith(".png"):
                 img = osp.join(path, file)
@@ -65,15 +68,14 @@ def main():
                                              pose_results,
                                              dataset=pose_model.cfg.data.test.type,
                                              show=False)
-                
+
                 with tempfile.TemporaryDirectory() as tmpdir:
                     file_name = os.path.splitext(img)[0]+'_output.png'
                     cv2.imwrite(file_name, vis_result)
                     file_name1 = osp.join(path+'/static/images/', 'test.jpg')
                     cv2.imwrite(file_name1, vis_result)
 
-                counter += 1
-                print("Progress: {}/{}".format(counter, total))
+                bar.update()
 
 
 if __name__ == "__main__":
