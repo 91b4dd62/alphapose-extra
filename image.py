@@ -8,7 +8,7 @@ def run_image(path: str, batch: bool, device: str):
     model = MMPose(backbone='SCNet')
     if not batch:
         result = model.inference(img=path, device=device,
-                                 show=True, name=os.path.splitext(img)[0]+"_output")
+                                 show=True, name=os.path.splitext(path)[0]+"_output")
         print(result)
     else:
         total = len([name for name in os.listdir(path)
