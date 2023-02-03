@@ -4,6 +4,7 @@ import torch
 from image import run_image
 from video import run_video
 from webcam import run_webcam
+from basic_recognition import display_pose
 
 app = typer.Typer()
 
@@ -28,6 +29,10 @@ def video(input_path: str, output_path: str, device: str = auto_device(), output
 def webcam(config: str = "webcam_cfg/pose_tracking.py", device: str = auto_device()):
     run_webcam(config=config, device=device)
 
+
+@app.command()
+def recognition(path: str, outpath: str, tracked: str, limit: float = 0.03):
+    display_pose(path, outpath, tracked, limit=limit)
 
 if __name__ == "__main__":
     app()

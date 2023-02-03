@@ -7,38 +7,22 @@ from tqdm import tqdm
 
 
 def angle(v1, v2):
-    return np.abs(np.arccos(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))))
+    v1_u = v1 / np.linalg.norm(v1)
+    v2_u = v2 / np.linalg.norm(v2)
+    return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
 
 
-def angleBetweenLines(line1, line2):
-    # line1 = [[x1, y1], [x2, y2]]
-    # line2 = [[x3, y3], [x4, y4]]
-    # By projecting one end of the line to the other line, determine which is the longer side
-    # and then decide whether the angle is larger than 90 degrees
-    x1, y1 = line1[0]
-    x2, y2 = line1[1]
-    x3, y3 = line2[0]
-    x4, y4 = line2[1]
-    v1 = np.array([x2-x1, y2-y1])
-    v2 = np.array([x4-x3, y4-y3])
-    v3 = np.array([x4-x1, y4-y1])
-    v4 = np.array([x2-x3, y2-y3])
-    if np.linalg.norm(v1) > np.linalg.norm(v2):
-        if np.linalg.norm(v3) < np.linalg.norm(v1):
-            return angle(v1, v3)
-        else:
-            return angle(v1, v4)
-    else:
-        if np.linalg.norm(v3) < np.linalg.norm(v2):
-            return angle(v2, v3)
-        else:
-            return angle(v2, v4)
+def angleBetweenLines(l1, l2):
+    x1, y1 = l1[0][0] - l1[1][0], l1[0][1] - l1[1][1]
+    x2, y2 = l2[0][0] - l2[1][0], l2[0][1] - l2[1][1]
+    return np.arccos((x1 * x2 + y1 * y2) / (np.sqrt(x1 * x1 + y1 * y1) * np.sqrt(x2 * x2 + y2 * y2)))
 
 # visualization (from poseflow)
 
 
-def display_pose(imgdir, visdir, tracked, cmap):
+def display_pose(imgdir, visdir, track, cmap=plt.cm.get_cmap(), limit=0.03):
     print("Start visualization...\n")
+    tracked = reader(track)
     for imgname in tqdm(tracked.keys()):
         img = Image.open(os.path.join(imgdir, imgname))
         width, height = img.size
@@ -78,63 +62,34 @@ def display_pose(imgdir, visdir, tracked, cmap):
             drawLine(Body, 'green')
             stdAngle = angle(Body[0], Body[1])
 
-            # Determine whether the person's left upper arm is raised
-            # If the angle between the left ankle to shoulder and the standard angle is greater than 90 degrees, it is considered to be raised
-            LArm = [np.clip(pose[[5, 7], 0], 0, width),
-                    np.clip(pose[[5, 7], 1], 0, height)]
-            if angleBetweenLines(LArm, Body) > 1.57:
-                drawLine(LArm, 'yellow')
-                raised['LArm'] = True
+            # Determine whether the person is standing or crouching
+            # Achieve this by calculating the angle between the line of hip to knee and the line of knee to ankle
+            LLeg = [np.clip(pose[[11, 13], 0], 0, width),
+                    np.clip(pose[[11, 13], 1], 0, height)]
+            RLeg = [np.clip(pose[[12, 14], 0], 0, width),
+                    np.clip(pose[[12, 14], 1], 0, height)]
+            LLLeg = [np.clip(pose[[13, 15], 0], 0, width),
+                     np.clip(pose[[13, 15], 1], 0, height)]
+            RLLeg = [np.clip(pose[[14, 16], 0], 0, width),
+                     np.clip(pose[[14, 16], 1], 0, height)]
+            LAngle = angleBetweenLines(LLeg, LLLeg)
+            RAngle = angleBetweenLines(RLeg, RLLeg)
+            if -limit < LAngle < limit and -limit < RAngle < limit:
+                raised['body'] = True
+                drawLine(LLeg, 'red')
+                drawLine(RLeg, 'red')
+                drawLine(LLLeg, 'red')
+                drawLine(RLLeg, 'red')
+                drawText(np.clip(pose[[11, 13], 0], 0, width),
+                         'Crouching: '+str(LAngle) + ','+str(RAngle), 'red')
             else:
-                drawLine(LArm, 'green')
-                raised['LArm'] = False
-
-            # Same for the right upper arm
-            RArm = [np.clip(pose[[6, 8], 0], 0, width),
-                    np.clip(pose[[6, 8], 1], 0, height)]
-            if angleBetweenLines(RArm, Body) > 1.57:
-                drawLine(RArm, 'yellow')
-                raised['RArm'] = True
-            else:
-                drawLine(RArm, 'green')
-                raised['RArm'] = False
-
-            # Determine whether the person's left lower arm is raised
-            # If the angle between the left wrist to elbow and the upper arm is lower than 90 degrees, it is considered to be raised, unless the upper arm is raised
-            LLArm = [np.clip(pose[[7, 9], 0], 0, width),
-                     np.clip(pose[[7, 9], 1], 0, height)]
-            if raised['LArm']:
-                if angleBetweenLines(LLArm, LArm) > 1.57:
-                    drawLine(LLArm, 'yellow')
-                    raised['LLArm'] = True
-                else:
-                    drawLine(LLArm, 'green')
-                    raised['LLArm'] = False
-            else:
-                if angleBetweenLines(LLArm, LArm) > 1.57:
-                    drawLine(LLArm, 'green')
-                    raised['LLArm'] = False
-                else:
-                    drawLine(LLArm, 'yellow')
-                    raised['LLArm'] = True
-
-            # Same for the right lower arm
-            RLArm = [np.clip(pose[[8, 10], 0], 0, width),
-                     np.clip(pose[[8, 10], 1], 0, height)]
-            if raised['RArm']:
-                if angleBetweenLines(RLArm, RArm) > 1.57:
-                    drawLine(RLArm, 'yellow')
-                    raised['RLArm'] = True
-                else:
-                    drawLine(RLArm, 'green')
-                    raised['RLArm'] = False
-            else:
-                if angleBetweenLines(RLArm, RArm) > 1.57:
-                    drawLine(RLArm, 'green')
-                    raised['RLArm'] = False
-                else:
-                    drawLine(RLArm, 'yellow')
-                    raised['RLArm'] = True
+                raised['body'] = False
+                drawLine(LLeg, 'yellow')
+                drawLine(RLeg, 'yellow')
+                drawLine(LLLeg, 'yellow')
+                drawLine(RLLeg, 'yellow')
+                drawText(np.clip(pose[[11, 13], 0], 0, width),
+                         'Not Crouching: '+str(LAngle) + ','+str(RAngle), 'yellow')
 
             # Draw the keypoints
             for idx_c, color in enumerate(colors):
@@ -165,5 +120,6 @@ def drawLine(line: list, color: str):
     plt.plot(line[0], line[1], 'r-', linewidth=20, color=color)
 
 
-display_pose('examples/', 'examples/vis/',
-             reader('examples/output.json'), plt.cm.get_cmap())
+def drawText(pos: list, text: str, color: str):
+    plt.text(pos[0], pos[1], text, color=color, fontsize=60)
+
