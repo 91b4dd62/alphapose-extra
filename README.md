@@ -14,6 +14,10 @@ $ conda activate openmmlab
 $ pip install -r requirements.txt
 ```
 
+## Optimizations
+
+- Cached model across frame processing
+
 ## Run locally
 
 ### Image
