@@ -2,9 +2,9 @@
 
 ![Based on `mmcv`](https://img.shields.io/badge/based%20on-mmcv-blueviolet?style=flat-square) ![Supported Python Versions](https://img.shields.io/pypi/pyversions/mmcv?style=flat-square) ![License](https://img.shields.io/github/license/91b4dd62/alphapose-extra?style=flat-square)
 
-https://github.com/91b4dd62/alphapose-extra/raw/main/examples/2.mp4
+https://media.githubusercontent.com/media/91b4dd62/alphapose-extra/main/examples/2.mp4
 
-https://github.com/91b4dd62/alphapose-extra/raw/main/examples/2_output.mp4
+https://media.githubusercontent.com/media/91b4dd62/alphapose-extra/main/examples/2_output.mp4
 
 ## Installation
 
