@@ -63,6 +63,6 @@ python cli.py webcam --config webcam_cfg/pose_tracking.py
 
 ### Pose recognition
 ```sh
-python cli.py recognition [img_dir] [out_dir] [json_file] [--limit=float]
+python cli.py recognition <img_dir> <out_dir> <json_file> [--limit=float]
 ```
 `--limit` determines the threshold for posing recognition
