@@ -21,7 +21,7 @@ def image(path: str, batch: bool = False, device: str = auto_device(), output: b
 
 @app.command()
 def video(input_path: str, output_path: str, device: str = auto_device(), output: bool = False, poseflow: bool = False):
-    run_video(input_path, output_path, device, output)
+    run_video(input_path, output_path, device=device, output=output, poseflow=poseflow)
 
 
 @app.command()
